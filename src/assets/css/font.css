@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'bf'; 
+    src: '@/assets/bf.otf'; 
+    font-weight: normal;
+    font-style: normal;
+  }
+*{
+    font-family: 'bf';
+}
