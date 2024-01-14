@@ -2,16 +2,45 @@
 import { useshopStore } from '../../store/useshopStor';
 import {ref,onMounted} from 'vue';
 const shopStore = useshopStore()
+const show = ref(false)
+const previewimg_url = ref('')
+const previewimg_css=ref('')
+const previewimg_name = ref('')
+const previewimg_price = ref('')
 onMounted(() => {
     shopStore.updateShopList()
 })
+const preview = (item) =>{
+    previewimg_url.value = item.image
+    previewimg_name.value = item.name
+    previewimg_price.value = item.price
+    show.value = true
+    //如果图片是组合包
+    if(item.name.includes('Bundle')){
+        previewimg_css.value='width: 350px;object-fit: fill;'
+    }else{
+        previewimg_css.value=''
+    }
+}
 </script>
 
 <template>
+<van-overlay :show="show" @click="show = false">
+    <div class="wrapper">
+        <div class="card" :style="previewimg_css">
+                <img class="preview-img" :src=previewimg_url alt="" :style="previewimg_css">
+            <div class="preview-info" :style="previewimg_css">
+                <p>{{previewimg_name}}</p>
+                <p><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">{{previewimg_price}}</p>
+            </div>
+        </div>
+    </div>
+</van-overlay>
+
 <div class="shop-section" v-for="(items,index) in shopStore.shopList" :key="items">
     <h2 class="section-name">{{index}}</h2>
-    <div class="shop-card" v-for="item in items">
-        <img class="item-img" v-lazy="item.image">
+    <div :class="'shop-card ' + index" v-for="item in items"  :style="{'height': index.includes('Jam Tracks') ? '200px' : 'none'}" @click="preview(item)">
+        <img class="item-img" v-lazy="item.image" :style="{'height': index.includes('Jam Tracks') ? '200px' : 'none'}">
         <div class="item-info-container">
         <p class="item-name">{{ item.name }}</p>
         <p class="item-price"><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">{{item.price}}</p>
@@ -79,14 +108,16 @@ onMounted(() => {
     font-size: 25px;
     color: white;
     position: relative;
-    left: 10px;
+    top: 20px;
+    left: 40px;
 }
 .item-price{
     font-size: 25px;
     color: white;
     letter-spacing: 2px;
     position: relative;
-    left: 10px;
+    top: 20px;
+    left: 30px;
 }
 .item-info-container{
     position: relative;
@@ -98,5 +129,74 @@ onMounted(() => {
     /* white-space: nowrap; */
     overflow-x: auto;
 }
+.wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    perspective: 1000px;
+}
+.card{
+    width: 400px;
+    height: 600px;
+    position: relative;
+    border-radius: 30px;
+    cursor: pointer;
+    background-color: #fff;
+    box-shadow: 1px 1px 20px rgba(0,0,0,0.1);
+    transform-style: preserve-3d;
+    animation: rotate 2.4s cubic-bezier(0.66, -0.47, 0.33, 1.5) forwards;
+}
+.card:hover {
+            animation: rotate 1.2s cubic-bezier(0.66, -0.47, 0.33, 1.5) forwards;
+        }
+.preview-img,
+.preview-info
+{
+    position:absolute;
+    top: 0px;
+    left: 0;
+    width: 400px;
+    height: 600px;
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: space-around; */
+    font-size: 60px;
+    background-color: #fff;
+    border-radius: 30px;
+    backface-visibility: hidden;
+    object-fit: cover;
+}
+.preview-info{
+    transform: rotateY(180deg);
+}
 
+@keyframes rotate {
+            0% {
+                transform: rotateY(0deg);
+            }
+
+            50% {
+                transform: rotateY(180deg);
+            }
+
+            100% {
+                transform: rotateY(360deg);
+            }
+        }
+
+        @keyframes rotate-reverse {
+            0% {
+                transform: rotateY(180deg);
+            }
+
+            100% {
+                transform: rotateY(0deg);
+            }
+            0% {
+                transform: rotateY(180deg);
+            }
+        }
 </style>

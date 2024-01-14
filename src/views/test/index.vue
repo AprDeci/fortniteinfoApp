@@ -35,7 +35,7 @@ onMounted(() => {
         <p class="item-price"><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">1200</p>
     </div>
 </div>
-    <div class="shop-card">
+    <div class="shop-card" style="flex: 1 1 550px;">
         <img class="item-img" v-lazy=imurl style="width: 550px;">
         <div class="item-info-container">
         <p class="item-name">Sparkplug</p>
@@ -63,9 +63,11 @@ onMounted(() => {
     border-radius: 20px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-between; 
+
 }
 .section-name{
+
     width: 100%;
     font-size: 40px;
     font-weight: bold;
@@ -74,7 +76,7 @@ onMounted(() => {
     display: block;
 }
 .shop-card{
-
+    flex: 1 1 200px;
     padding: 0;
     overflow: hidden;
     border-radius: 20px;
