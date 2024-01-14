@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-    baseURL:"https://fortnite-api.com",
+    baseURL:"http://fortnite-api.com",
     timeout:60000,
     headers:{
         'Authorization':'b09724da-1c1c-42c8-90da-741815fc8cd7'
