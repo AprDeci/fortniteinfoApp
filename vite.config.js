@@ -12,7 +12,7 @@ export default defineConfig({
       resolvers: [VantResolver()],
     }),
   ],
-  base: '/fortniteinfoApp/',
+  base: '/',
   server:{
     host:"192.168.8.216",
     port:"8080",
