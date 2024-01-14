@@ -9,6 +9,7 @@ const previewimg_name = ref('')
 const previewimg_price = ref('')
 onMounted(() => {
     shopStore.updateShopList()
+
 })
 const preview = (item) =>{
     previewimg_url.value = item.image
@@ -22,13 +23,18 @@ const preview = (item) =>{
         previewimg_css.value=''
     }
 }
+const playAnimation = (e) =>{
+    animate.play();
+    console.log(12312)
+}
+
 </script>
 
 <template>
 <van-overlay :show="show" @click="show = false">
-    <div class="wrapper">
-        <div class="card" :style="previewimg_css">
-                <img class="preview-img" :src=previewimg_url alt="" :style="previewimg_css">
+    <div class="wrapper" >
+        <div class="card" :style="previewimg_css" @click.stop @touchstart="playAnimation">
+                <img class="preview-img" :src=previewimg_url alt="" :style="previewimg_css"  >
             <div class="preview-info" :style="previewimg_css">
                 <p>{{previewimg_name}}</p>
                 <p><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">{{previewimg_price}}</p>
@@ -70,6 +76,7 @@ const preview = (item) =>{
     flex-wrap: wrap;
     justify-content: space-between;
 }
+
 .section-name{
     width: 100%;
     font-size: 40px;
@@ -126,8 +133,8 @@ const preview = (item) =>{
     max-width: 200px;
     height: 100%;
     background:#00000055;
-    /* white-space: nowrap; */
-    overflow-x: auto;
+
+
 }
 .wrapper{
     display: flex;
@@ -143,13 +150,23 @@ const preview = (item) =>{
     border-radius: 30px;
     cursor: pointer;
     background-color: #fff;
-    box-shadow: 1px 1px 20px rgba(0,0,0,0.1);
+    box-shadow: 1px 1px 20px rgba(0,0,0,0.4);
     transform-style: preserve-3d;
-    animation: rotate 2.4s cubic-bezier(0.66, -0.47, 0.33, 1.5) forwards;
+    animation: rotate 2.0s cubic-bezier(0.66, -0.47, 0.33, 1.5) forwards;
+    overflow:hidden;
 }
-.card:hover {
-            animation: rotate 1.2s cubic-bezier(0.66, -0.47, 0.33, 1.5) forwards;
-        }
+.card::before{
+    position: absolute;
+    content: '';
+    width: 80%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgb(255, 255, 255), transparent);
+    left: -100%;
+    transition: 0.5s;
+    z-index: 1;
+    animation: lightmove 2.4s  cubic-bezier(0.66, -0.47, 0.33, 1.5) forwards; 
+}
+
 .preview-img,
 .preview-info
 {
@@ -162,7 +179,7 @@ const preview = (item) =>{
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* justify-content: space-around; */
+    justify-content: space-around;
     font-size: 60px;
     background-color: #fff;
     border-radius: 30px;
@@ -171,6 +188,11 @@ const preview = (item) =>{
 }
 .preview-info{
     transform: rotateY(180deg);
+}
+.preview-info p{
+    word-wrap: nowrap;
+    width: 100%;
+    text-align: center;
 }
 
 @keyframes rotate {
@@ -181,22 +203,23 @@ const preview = (item) =>{
             50% {
                 transform: rotateY(180deg);
             }
-
-            100% {
-                transform: rotateY(360deg);
-            }
-        }
-
-        @keyframes rotate-reverse {
-            0% {
-                transform: rotateY(180deg);
-            }
-
+            
             100% {
                 transform: rotateY(0deg);
             }
-            0% {
-                transform: rotateY(180deg);
-            }
         }
+@keyframes lightmove{
+    0%{
+        left: -100%;
+    }
+    50%{
+        left: 100%;
+    }
+    50.1%{
+        left: -100%;
+    }
+    100%{
+        left: 100%;
+    }
+}
 </style>
