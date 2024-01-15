@@ -9,13 +9,13 @@ const active = ref(0)
 </script>
 
 <template>
- <van-nav-bar :title="nn" fixed placeholder/>
+ <van-nav-bar :title="nn" fixe=true placeholder/>
 
 
 <router-view to="shop"></router-view>
 <van-back-top right="10vw" bottom="10vh" />
 
-<van-tabbar route v-model="active" placeholder>
+<van-tabbar route v-model="active" placeholder fixed=true>
   <van-tabbar-item replace to="/shop" icon="cart-o" @click="nn='商城'">商店</van-tabbar-item>
   <van-tabbar-item replace to="/info" icon="search" @click="nn='查询'">查询</van-tabbar-item>
   <van-tabbar-item replace to="/test" icon="search" @click="nn='测试'">测试</van-tabbar-item>
