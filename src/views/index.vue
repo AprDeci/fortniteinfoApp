@@ -9,7 +9,7 @@ const active = ref(0)
 </script>
 
 <template>
- <van-nav-bar :title="nn" fixe=true placeholder/>
+ <van-nav-bar :title="nn" fixed placeholder/>
 
 
 <router-view to="shop"></router-view>

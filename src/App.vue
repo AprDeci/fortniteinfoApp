@@ -9,5 +9,4 @@ import {ref} from 'vue'
 
 <style scoped>
 
-@import './assets/css/font.css';
 </style>
