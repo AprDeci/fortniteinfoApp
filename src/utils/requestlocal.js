@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-    baseURL:"http://fortnite.aprdec.top/",
+    baseURL:"https://fortnite.aprdec.top/",
     timeout:60000,
 })
 
