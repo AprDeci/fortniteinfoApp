@@ -1,11 +1,9 @@
 import axios from 'axios'
+import.meta.env.VITE_API
 
 const instance = axios.create({
-    baseURL:"http://fortnite-api.com",
+    baseURL:import.meta.env.VITE_API,
     timeout:60000,
-    headers:{
-        'Authorization':'b09724da-1c1c-42c8-90da-741815fc8cd7'
-    },
 })
 
 // 创建响应拦截

@@ -1,48 +1,71 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+import { useshopStore } from '../../store/useshopStore';
+import testcc from '@/components/testcc.vue'
 
 const imgurl='https://trackercdn.com/game-assets/fortnite/io/images/shop/cb6c736a4f9aef184d403f62173e367ba4b4ae949f1bf8c716cc75e128b21dfe/v2/MI_CID_335_F_Scrapyard/background.png?v=1'
 const imurl='src/assets/imgs/test-img.webp'
+const imurl2='src/assets/imgs/ttt2.webp'
 const containerdom =ref()
 const namedom = ref()
-function changefontsize(){
-     if(containerdom.value.scrollWidth>containerdom.value.offsetWidth){
-         namedom.value.style.fontSize = "18px"
-         console.log("dadaddadada")
-     }
-}
+const imgindex = ref(0)
+const item = ['a','b']
+const iii  =ref({"name": "Slim Shady Bundle",
+            "price": "2500",
+            "image": [
+                "https://fortnite.126386.xyz/game-assets/fortnite/io/images/shop/0e546fa4a1a9a479d5116879b6f3e27a18f203402192b21a6ce51d0ec99de469/v2/MI_Bundle_Featured_HeavyRoar/background.png?v=1",
+                "https://fortnite.126386.xyz/game-assets/fortnite/io/images/shop/0e546fa4a1a9a479d5116879b6f3e27a18f203402192b21a6ce51d0ec99de469/v2/MI_Bundle_Featured_HeavyRoar_02/background.png?v=1",
+                "https://fortnite.126386.xyz/game-assets/fortnite/io/images/shop/0e546fa4a1a9a479d5116879b6f3e27a18f203402192b21a6ce51d0ec99de469/v2/MI_Bundle_Featured_HeavyRoar_03/background.png?v=1",
+                "https://fortnite.126386.xyz/game-assets/fortnite/io/images/shop/0e546fa4a1a9a479d5116879b6f3e27a18f203402192b21a6ce51d0ec99de469/v2/MI_Bundle_Featured_HeavyRoar_04/background.png?v=1"
+            ]})
+
+
+
+const shopStore = useshopStore()
+
 onMounted(() => {
-    changefontsize()
-    console.log(containerdom.value.scrollWidth)
+    shopStore.updateShopList()
+
 })
 
 </script>
 
 <template>
-<div class="shop-section" >
+<!-- <div class="shop-section" >
     <h2 class="section-name">Gear For Festival </h2>
-    <div class="shop-card">
+    <div class="shop-card" >
         <img class="item-img" v-lazy=imurl>
+        <img class="item-img" v-lazy=imurl2>
         <div class="item-info-container" ref="containerdom">
         <p class="item-name" ref="namedom">Festival bundle bundle bundle</p>
         <p class="item-price"><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">1200</p>
     </div>
     </div>
     <div class="shop-card">
-        <img class="item-img" v-lazy=imurl style="height: 200px;">
+        <img class="item-img" v-lazy=imurl >
         <div class="item-info-container">
         <p class="item-name">Sparkplug</p>
         <p class="item-price"><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">1200</p>
     </div>
 </div>
-    <div class="shop-card" style="flex: 1 1 550px;">
-        <img class="item-img" v-lazy=imurl style="width: 550px;">
+    <div class="shop-card" >
+        <img class="item-img" v-lazy=imurl >
         <div class="item-info-container">
         <p class="item-name">Sparkplug</p>
         <p class="item-price"><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">1200</p>
     </div>
 </div>
+</div> -->
+
+<div class="shop-section" v-for="(items,index) in shopStore.shopList" :key="items">
+    <h2 class="section-name">{{index}}</h2>
+    <div :class="'shop-card ' + index" v-for="item in items"  :style="{'height': index.includes('Jam Tracks') ? '200px' : 'none'}">
+        
+
+    </div>
 </div>
+
+
 </template>
 
 <style scoped>
@@ -63,57 +86,34 @@ onMounted(() => {
     border-radius: 20px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; 
-
+    justify-content: space-between;
 }
-.section-name{
 
+.section-name{
     width: 100%;
     font-size: 40px;
     font-weight: bold;
     margin-bottom: 10px;
     color: white;
-    display: block;
-}
-.shop-card{
-    flex: 1 1 200px;
-    padding: 0;
-    overflow: hidden;
-    border-radius: 20px;
-    margin-left: 0;
-    border-radius: 10px;
-    box-shadow: 4px 4px 4px #00000057;
-    display: inline-block;
-}
-.item-img{
-    border-radius: 10px;
-    width: 200px;
-    height: 500px;
-    object-fit: cover;
-    display: block;
-    display: block;
-    overflow: hidden;
-    transition: all 0.6s;  
-    
-}
-
-.item-img:hover{
-    transform: scale(1.2) rotate(5deg);
 
 }
+
+
+
 .item-name{
-
+    font-size: 25px;
     color: white;
-
     position: relative;
-    left: 10px;
+    top: 20px;
+    left: 40px;
 }
 .item-price{
     font-size: 25px;
     color: white;
     letter-spacing: 2px;
     position: relative;
-    left: 10px;
+    top: 20px;
+    left: 30px;
 }
 .item-info-container{
     position: relative;
@@ -122,7 +122,102 @@ onMounted(() => {
     max-width: 200px;
     height: 100%;
     background:#00000055;
-    /* white-space: nowrap; */
-    overflow-x: auto;
+
+}
+
+
+
+
+
+
+
+
+
+
+.wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    perspective: 1000px;
+}
+.card{
+    width: 400px;
+    height: 600px;
+    position: relative;
+    border-radius: 30px;
+    cursor: pointer;
+    background-color: #fff;
+    box-shadow: 1px 1px 20px rgba(0,0,0,0.4);
+    transform-style: preserve-3d;
+    animation: rotate 2.0s cubic-bezier(0.66, -0.47, 0.33, 1.5) forwards;
+    overflow:hidden;
+}
+.card::before{
+    position: absolute;
+    content: '';
+    width: 80%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgb(255, 255, 255), transparent);
+    left: -100%;
+    transition: 0.5s;
+    z-index: 1;
+    animation: lightmove 2.4s  cubic-bezier(0.66, -0.47, 0.33, 1.5) forwards; 
+}
+
+.preview-img,
+.preview-info
+{
+    position:absolute;
+    top: 0px;
+    left: 0;
+    width: 400px;
+    height: 600px;
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 60px;
+    background-color: #fff;
+    border-radius: 30px;
+    backface-visibility: hidden;
+    object-fit: cover;
+}
+.preview-info{
+    transform: rotateY(180deg);
+}
+.preview-info p{
+    word-wrap: nowrap;
+    width: 100%;
+    text-align: center;
+}
+
+@keyframes rotate {
+            0% {
+                transform: rotateY(0deg);
+            }
+
+            50% {
+                transform: rotateY(180deg);
+            }
+            
+            100% {
+                transform: rotateY(0deg);
+            }
+        }
+@keyframes lightmove{
+    0%{
+        left: -100%;
+    }
+    50%{
+        left: 100%;
+    }
+    50.1%{
+        left: -100%;
+    }
+    100%{
+        left: 100%;
+    }
 }
 </style>

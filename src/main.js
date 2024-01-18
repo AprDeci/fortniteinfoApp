@@ -6,6 +6,7 @@ import { Lazyload } from 'vant';
 import { ImagePreview } from 'vant';
 import { createPinia } from 'pinia'
 import "vant/lib/index.css"
+import 'swiper/css';
 const pinia = createPinia()
 const app = createApp(App)
 app.use(router)

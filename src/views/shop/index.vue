@@ -1,18 +1,21 @@
 <script setup>
-import { useshopStore } from '../../store/useshopStor';
+import { useshopStore } from '../../store/useshopStore';
 import {ref,onMounted} from 'vue';
+import {Swiper,SwiperSlide} from 'swiper/vue'
+import { EffectCards } from 'swiper/modules';
 const shopStore = useshopStore()
 const show = ref(false)
 const previewimg_url = ref('')
 const previewimg_css=ref('')
 const previewimg_name = ref('')
 const previewimg_price = ref('')
+const imglist = ref([])
 onMounted(() => {
     shopStore.updateShopList()
 
 })
 const preview = (item) =>{
-    previewimg_url.value = item.image
+    imglist.value = item['image']
     previewimg_name.value = item.name
     previewimg_price.value = item.price
     show.value = true
@@ -28,25 +31,43 @@ const playAnimation = (e) =>{
     console.log(12312)
 }
 
+// Swiper配置
+import 'swiper/css';
+import 'swiper/css/effect-cards';
+const modules = [EffectCards]
+
+import overlay from '../../components/overlay.vue'
 </script>
 
 <template>
-<van-overlay :show="show" @click="show = false">
-    <div class="wrapper" >
-        <div class="card" :style="previewimg_css" @click.stop @touchstart="playAnimation">
-                <img class="preview-img" :src=previewimg_url alt="" :style="previewimg_css"  >
-            <div class="preview-info" :style="previewimg_css">
-                <p>{{previewimg_name}}</p>
-                <p><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">{{previewimg_price}}</p>
-            </div>
-        </div>
+<overlay :show.sync="show" @touchmove.prevent >
+    <div class="wrapper" @click = "show=false">
+    <swiper
+        :effect="'cards'"
+        :grabCursor="true"
+        :modules="modules"
+        :cardsEffect="{
+            slideShadows: true,
+            perSlideRotate: 10,
+            rotate:true,
+            perSlideOffset:5
+        }"
+        class="mySwiper">
+
+        <swiper-slide v-for="img in imglist" :key="img" @click.stop>
+        <img :src="img" alt="">
+        <span>{{ previewimg_price }}</span>
+        <h2>{{ previewimg_name }}</h2>
+        </swiper-slide>
+
+        </swiper>
     </div>
-</van-overlay>
+</overlay>
 
 <div class="shop-section" v-for="(items,index) in shopStore.shopList" :key="items">
     <h2 class="section-name">{{index}}</h2>
     <div :class="'shop-card ' + index" v-for="item in items"  :style="{'height': index.includes('Jam Tracks') ? '200px' : 'none'}" @click="preview(item)">
-        <img class="item-img" v-lazy="item.image" :style="{'height': index.includes('Jam Tracks') ? '200px' : 'none'}">
+        <img class="item-img" v-for="img in item.image" v-lazy="img" alt="" :style="{'height': index.includes('Jam Tracks') ? '200px' : 'none'}">
         <div class="item-info-container">
         <p class="item-name">{{ item.name }}</p>
         <p class="item-price"><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">{{item.price}}</p>
@@ -76,17 +97,17 @@ const playAnimation = (e) =>{
     flex-wrap: wrap;
     justify-content: space-between;
 }
-
 .section-name{
     width: 100%;
-    font-size: 40px;
+    font-size: 50px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin: 10px 0 10px 0;
     color: white;
     display: block;
 }
 .shop-card{
     height: 500px;
+    width: 200px;
     overflow: hidden;
     border-radius: 20px;
     margin-bottom: 20px;
@@ -94,6 +115,7 @@ const playAnimation = (e) =>{
     border-radius: 10px;
     box-shadow: 4px 4px 4px #00000057;
     display: inline-block;
+    position: relative;
 }
 .item-img{
     border-radius: 10px;
@@ -127,15 +149,15 @@ const playAnimation = (e) =>{
     left: 30px;
 }
 .item-info-container{
-    position: relative;
-    bottom: 110px;
+    position: absolute;
     padding-right: 1px;
-    max-width: 200px;
+    width: 100%;
     height: 100%;
     background:#00000055;
-
-
+    left: 0;
+    top: 75%
 }
+/* overlay-swiper */
 .wrapper{
     display: flex;
     justify-content: center;
@@ -143,83 +165,32 @@ const playAnimation = (e) =>{
     height: 100vh;
     perspective: 1000px;
 }
-.card{
-    width: 400px;
-    height: 600px;
+
+.swiper {
+        width: 400px;
+        height: 600px;
+      }
+
+.swiper-slide {
+        position: relative;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        border-radius: 30px;
+        background: linear-gradient(to top, #0f2027, #203a4300, #2c536400),
+                    no-repeat 50% 50% / cover;
+      }
+.swiper-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+.swiper span,
+.swiper h2 {
+    color: white;
     position: relative;
-    border-radius: 30px;
-    cursor: pointer;
-    background-color: #fff;
-    box-shadow: 1px 1px 20px rgba(0,0,0,0.4);
-    transform-style: preserve-3d;
-    animation: rotate 2.0s cubic-bezier(0.66, -0.47, 0.33, 1.5) forwards;
-    overflow:hidden;
-}
-.card::before{
-    position: absolute;
-    content: '';
-    width: 80%;
-    height: 100%;
-    background: linear-gradient(to right, transparent, rgb(255, 255, 255), transparent);
-    left: -100%;
-    transition: 0.5s;
-    z-index: 1;
-    animation: lightmove 2.4s  cubic-bezier(0.66, -0.47, 0.33, 1.5) forwards; 
-}
-
-.preview-img,
-.preview-info
-{
-    position:absolute;
-    top: 0px;
-    left: 0;
-    width: 400px;
-    height: 600px;
-    border-radius: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    font-size: 60px;
-    background-color: #fff;
-    border-radius: 30px;
-    backface-visibility: hidden;
-    object-fit: cover;
-}
-.preview-info{
-    transform: rotateY(180deg);
-}
-.preview-info p{
-    word-wrap: nowrap;
-    width: 100%;
-    text-align: center;
-}
-
-@keyframes rotate {
-            0% {
-                transform: rotateY(0deg);
-            }
-
-            50% {
-                transform: rotateY(180deg);
-            }
-            
-            100% {
-                transform: rotateY(0deg);
-            }
-        }
-@keyframes lightmove{
-    0%{
-        left: -100%;
-    }
-    50%{
-        left: 100%;
-    }
-    50.1%{
-        left: -100%;
-    }
-    100%{
-        left: 100%;
-    }
+    bottom: 120px;
+    left: 20px;
+    font-size: 45px;
 }
 </style>
