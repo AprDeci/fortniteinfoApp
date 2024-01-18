@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useshopStore } from '../../store/useshopStore';
-import testcc from '@/components/testcc.vue'
+
 
 const imgurl='https://trackercdn.com/game-assets/fortnite/io/images/shop/cb6c736a4f9aef184d403f62173e367ba4b4ae949f1bf8c716cc75e128b21dfe/v2/MI_CID_335_F_Scrapyard/background.png?v=1'
 const imurl='src/assets/imgs/test-img.webp'

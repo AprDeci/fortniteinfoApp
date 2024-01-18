@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from 'vue';
 import {  ref,defineProps,watch } from 'vue';
-import { MaskSwipe } from "fly-comp"
+
 const props = defineProps({
   num:Number,
   shopitem:Object
@@ -59,28 +59,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="img-container">
-        <!-- <div class="swipe-item"
-         :class="{'swipe-item-mask': index === currentIndex}"
-         v-for="(url, index) in imgList"
-         :key="index"
-         :style="{ zIndex: zIndexArr[index],
-         'transition': index === currentIndex ? transition : 'none',
-          'mask-image': index === currentIndex ? `url(https://tse2-mm.cn.bing.net/th/id/OIP-C.j4A4O13jR7iochE26wPX9AHaFD?rs=1&pid=ImgDetMain)` : '',
-         '-webkit-mask-image': index === currentIndex ? `url(https://tse2-mm.cn.bing.net/th/id/OIP-C.j4A4O13jR7iochE26wPX9AHaFD?rs=1&pid=ImgDetMain)`: '',
-         'mask-position':  index === currentIndex ? maskPosition: '',
-         '-webkit-mask-position':  index === currentIndex ? maskPosition: '' }">
-      <img :src="url" alt=""> -->
-      <MaskSwipe
-        :duration="3"
-        :transition-duration="1"
-        :img-list=img
-        maskPositionFrom="left"
-        maskPositionTo="right"
-        mask-image="linear-gradient(to right, #ff0000 50%, transparent 52.5%)"
-        mask-size="210%"
-    />
-    </div>
+
 
 
 </template>
