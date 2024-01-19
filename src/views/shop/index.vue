@@ -26,10 +26,6 @@ const preview = (item) =>{
         previewimg_css.value=''
     }
 }
-const playAnimation = (e) =>{
-    animate.play();
-    console.log(12312)
-}
 
 // Swiper配置
 import 'swiper/css';
@@ -66,13 +62,15 @@ import overlay from '../../components/overlay.vue'
 
 <div class="shop-section" v-for="(items,index) in shopStore.shopList" :key="items">
     <h2 class="section-name">{{index}}</h2>
-    <div :class="'shop-card ' + index" v-for="item in items"  :style="{'height': index.includes('Jam Tracks') ? '200px' : 'none'}" @click="preview(item)">
-        <img class="item-img" v-for="img in item.image" v-lazy="img" alt="" :style="{'height': index.includes('Jam Tracks') ? '200px' : 'none'}">
+    <div :class="'shop-card ' + index" v-for="item in items" :style="{'height': index.includes('Jam Tracks') ? '200px' : 'none'}"   @click="preview(item)">
+        <img class="item-img" v-for="img in item.image" v-lazy="img" alt="" >
         <div class="item-info-container">
-        <p class="item-name">{{ item.name }}</p>
-        <p class="item-price"><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">{{item.price}}</p>
+            <p class="item-name">{{ item.name }}</p>
+            <p class="item-price"><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">{{item.price}}</p>
+        </div>
     </div>
-    </div>
+    <div class="shop-card" v-if="items.length%3==2"></div>
+
 </div>
 
 </template>
@@ -107,7 +105,7 @@ import overlay from '../../components/overlay.vue'
 }
 .shop-card{
     height: 500px;
-    width: 200px;
+    width: 210px;
     overflow: hidden;
     border-radius: 20px;
     margin-bottom: 20px;
@@ -119,8 +117,8 @@ import overlay from '../../components/overlay.vue'
 }
 .item-img{
     border-radius: 10px;
-    width: 200px;
-    height: 500px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     display: block;
     z-index: 1;

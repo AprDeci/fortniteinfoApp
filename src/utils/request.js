@@ -3,6 +3,7 @@ import.meta.env.VITE_API
 
 const instance = axios.create({
     baseURL:import.meta.env.VITE_API,
+    // baseURL:"https://fortnite.aprdec.top/",
     timeout:60000,
 })
 
