@@ -3,6 +3,7 @@ import { useshopStore } from '../../store/useshopStore';
 import {ref,onMounted} from 'vue';
 import {Swiper,SwiperSlide} from 'swiper/vue'
 import { EffectCards } from 'swiper/modules';
+import maskSwiper from '../../components/maskSwiper.vue'
 const shopStore = useshopStore()
 const show = ref(false)
 const previewimg_url = ref('')
@@ -36,7 +37,20 @@ import overlay from '../../components/overlay.vue'
 </script>
 
 <template>
-<overlay :show.sync="show" @touchmove.prevent >
+
+<div class="shop-section" v-for="(items,index) in shopStore.shopList" :key="items">
+    <h2 class="section-name">{{index}}</h2>
+    <div :class="'shop-card ' + index" v-for="item in items" :style="{'height': index.includes('Jam Tracks') ? '200px' : 'none'}"   @click="preview(item)">
+        <maskSwiper :imglist="item['image']"></maskSwiper>
+        <div class="item-info-container" >
+            <p class="item-name">{{ item.name }}</p>
+            <p class="item-price"><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">{{item.price}}</p>
+        </div>
+    </div>
+    <div class="shop-card" v-if="items.length%3==2"></div>
+</div>
+
+<overlay :show.sync="show" @touchmove.prevent :zIndex="999" >
     <div class="wrapper" @click = "show=false">
     <swiper
         :effect="'cards'"
@@ -59,19 +73,6 @@ import overlay from '../../components/overlay.vue'
         </swiper>
     </div>
 </overlay>
-
-<div class="shop-section" v-for="(items,index) in shopStore.shopList" :key="items">
-    <h2 class="section-name">{{index}}</h2>
-    <div :class="'shop-card ' + index" v-for="item in items" :style="{'height': index.includes('Jam Tracks') ? '200px' : 'none'}"   @click="preview(item)">
-        <img class="item-img" v-for="img in item.image" v-lazy="img" alt="" >
-        <div class="item-info-container">
-            <p class="item-name">{{ item.name }}</p>
-            <p class="item-price"><img style="width: 20px; vertical-align: middle;" src="@/assets/imgs/vbuck.png" alt="">{{item.price}}</p>
-        </div>
-    </div>
-    <div class="shop-card" v-if="items.length%3==2"></div>
-
-</div>
 
 </template>
 
@@ -153,7 +154,8 @@ import overlay from '../../components/overlay.vue'
     height: 100%;
     background:#00000055;
     left: 0;
-    top: 75%
+    top: 75%;
+    z-index: 4;
 }
 /* overlay-swiper */
 .wrapper{
